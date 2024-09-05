@@ -6,6 +6,11 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  avatar: {
+    type: String,
+    default:
+      "https://cdn.dribbble.com/userupload/13153732/file/original-46942ab03ab022cc8dc3cbc5a558ed69.png?resize=1504x1128",
+  },
   username: {
     type: String,
     required: true,

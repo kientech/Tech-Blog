@@ -1,5 +1,6 @@
 const express = require("express");
 const userController = require("../controllers/userController");
+const upload = require("../middleware/uploadConfig");
 const {
   authMiddleware,
   adminMiddleware,
@@ -7,7 +8,12 @@ const {
 const router = express.Router();
 
 router.get("/profile", authMiddleware, userController.getUser);
-router.patch("/profile", authMiddleware, userController.updateUser);
+router.patch(
+  "/profile",
+  authMiddleware,
+  upload.single("avatar"),
+  userController.updateUser
+);
 router.get("/", authMiddleware, adminMiddleware, userController.getAllUsers);
 router.delete(
   "/:id",
