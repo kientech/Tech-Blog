@@ -18,6 +18,10 @@ const blogSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  category: {
+    type: String,
+    required: true,
+  },
   updatedAt: {
     type: Date,
     default: Date.now,
