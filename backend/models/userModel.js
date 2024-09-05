@@ -30,6 +30,12 @@ const userSchema = new mongoose.Schema({
       ref: "Blog",
     },
   ],
+  resetPasswordToken: {
+    type: String,
+  },
+  resetPasswordExpire: {
+    type: String,
+  },
 });
 
 // Hash password pre save
