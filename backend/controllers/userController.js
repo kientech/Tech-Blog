@@ -1,6 +1,6 @@
 const User = require("../models/userModel");
-const path = require('path')
-const fs = require('fs');
+const path = require("path");
+const fs = require("fs");
 
 // get user function
 exports.getUser = async (req, res) => {
@@ -39,9 +39,7 @@ exports.getAllUsers = async (req, res) => {
 // update user
 exports.updateUser = async (req, res) => {
   try {
-    // Nếu có file upload, xử lý avatar
     if (req.file) {
-      // Xóa avatar cũ nếu có
       const user = await User.findById(req.user.id);
       if (user.avatar) {
         const oldAvatarPath = path.join(__dirname, "..", user.avatar);
@@ -50,11 +48,9 @@ exports.updateUser = async (req, res) => {
         }
       }
 
-      // Cập nhật avatar mới
       req.body.avatar = `/uploads/avatars/${req.file.filename}`;
     }
 
-    // Cập nhật thông tin người dùng
     const updatedUser = await User.findByIdAndUpdate(req.user.id, req.body, {
       new: true,
     }).select("-password");

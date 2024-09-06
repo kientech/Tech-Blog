@@ -113,6 +113,83 @@ exports.deleteBlog = async (req, res) => {
   }
 };
 
+// get lastest blogs
+exports.getLastestBlog = async (req, res) => {
+  try {
+    const { limit = 5 } = req.query;
+
+    const latestBlogs = await Blog.find()
+      .sort({ createdAt: -1 })
+      .limit(Number(limit))
+      .populate("author", "name email");
+
+    return res.status(200).json({
+      status: "success",
+      length: latestBlogs.length,
+      data: latestBlogs,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: "error",
+      message: error.message,
+    });
+  }
+};
+
+// filter blogs
+exports.filterBlogs = async (req, res) => {
+  try {
+    const { search, author, category, page = 1, limit = 8 } = req.query;
+
+    const query = {};
+
+    // search by title or content of a blog
+    if (search) {
+      query.$or = [
+        { title: { $regex: search, $options: "i" } },
+        { content: { $regex: search, $options: "i" } },
+        { category: { $regex: search, $options: "i" } },
+      ];
+    }
+
+    // search author
+    if (author) {
+      query.author = author;
+    }
+
+    // search category
+    if (category) {
+      query.category = category;
+    }
+
+    const skip = (page - 1) * limit;
+
+    const blogs = await Blog.find(query)
+      .populate("author", "email")
+      .skip(skip)
+      .limit(Number(limit));
+
+    const total = await Blog.countDocuments(query);
+
+    if (blogs.length <= 0) {
+      return res.status(404).json({
+        status: "error",
+        message: "Blogs Not Found!",
+      });
+    }
+
+    return res.status(200).json({
+      status: "success",
+      data: blogs,
+      totalItems: total,
+      page: Number(page),
+      totalPages: Math.ceil(total / limit),
+    });
+  } catch (error) {
+    return res.status(500).json({ message: "Server Error" });
+  }
+};
+
 // get all blogs role admin
 exports.getAllBlogsAdmin = async (req, res) => {
   try {
@@ -129,5 +206,3 @@ exports.getAllBlogsAdmin = async (req, res) => {
     });
   }
 };
-
-

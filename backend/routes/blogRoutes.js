@@ -7,6 +7,8 @@ const {
 const router = express.Router();
 
 router.post("/create", authMiddleware, blogController.createBlog);
+router.get("/filter", blogController.filterBlogs);
+router.get("/lastest", blogController.getLastestBlog);
 router.get("/", authMiddleware, blogController.getAllBlogsUser);
 router.get(
   "/all",

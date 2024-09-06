@@ -35,6 +35,28 @@ const userSchema = new mongoose.Schema({
       ref: "Blog",
     },
   ],
+  socialMedia: {
+    tiktok: {
+      type: String,
+      default: "#",
+    },
+    facebook: {
+      type: String,
+      default: "#",
+    },
+    twitter: {
+      type: String,
+      default: "#",
+    },
+    youtube: {
+      type: String,
+      default: "#",
+    },
+    instagram: {
+      type: String,
+      default: "#",
+    },
+  },
   resetPasswordToken: {
     type: String,
   },

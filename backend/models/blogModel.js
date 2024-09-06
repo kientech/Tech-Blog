@@ -24,6 +24,7 @@ const blogSchema = new mongoose.Schema({
   },
   status: {
     type: String,
+    enum: ["pending", "approved"],
     default: "pending",
   },
   updatedAt: {
