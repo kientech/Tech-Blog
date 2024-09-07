@@ -98,12 +98,45 @@ function SideBar() {
           <input
             type="text"
             placeholder="example@gmail.com"
-            className="p-2 px-6 block w-full rounded-full border border-gray-100 focus:border-buttonColor outline-none"
+            className="p-2 px-6 block w-full rounded-full border border-gray-100 focus:border-buttonColor outline-none text-buttonColor"
           />
           <button className="block my-4 px-4 py-2 rounded-full bg-buttonColor text-md text-textWhite w-full">
             Subcribe
           </button>
         </form>
+      </div>
+      <div className="p-10 rounded-lg border border-gray-100 mt-8">
+        <h1 className="text-xl font-bold text-textBold hover:text-buttonColor transition-none text-center mb-8">
+          Tag Clouds
+        </h1>
+
+        <div className="flex gap-2 flex-wrap">
+          <button className="py-2 px-4 rounded-lg border border-gray-100 text-textBase text-sm">
+            #technology
+          </button>
+          <button className="py-2 px-4 rounded-lg border border-gray-100 text-textBase text-sm">
+            #web
+          </button>
+          <button className="py-2 px-4 rounded-lg border border-gray-100 text-textBase text-sm">
+            #app
+          </button>
+          <button className="py-2 px-4 rounded-lg border border-gray-100 text-textBase text-sm">
+            #technology
+          </button>
+          <button className="py-2 px-4 rounded-lg border border-gray-100 text-textBase text-sm">
+            #technology
+          </button>
+        </div>
+      </div>
+
+      <div className="mt-8">
+        <div className="w-full h-[500px] rounded-lg overflow-hidden">
+          <img
+            src="https://cdn.dribbble.com/userupload/12323819/file/original-a9feadb89946ddd142f612244eb9d25e.png?resize=1504x1128"
+            alt=""
+            className="w-full h-full rounded-lg hover:scale-105 transition-all object-cover"
+          />
+        </div>
       </div>
     </div>
   );

@@ -4,6 +4,7 @@ import HomePage from "./pages/HomePage";
 import Navbar from "./components/Client/Navbar";
 import WebPage from "./pages/WebPage";
 import AppPage from "./pages/AppPage";
+import Footer from "./components/Client/Footer";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/web" element={<WebPage></WebPage>} />
         <Route path="/app" element={<AppPage></AppPage>} />
       </Routes>
+      <Footer />
     </div>
   );
 }
