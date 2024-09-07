@@ -32,6 +32,30 @@ exports.createBlog = async (req, res) => {
   }
 };
 
+// get a blog
+exports.getBlogById = async (req, res) => {
+  try {
+    const blog = await Blog.findById(req.params.id);
+
+    if (!blog) {
+      return res.status(404).json({ message: "Blog not found" });
+    }
+
+    blog.views += 1;
+    await blog.save();
+
+    return res.status(200).json({
+      status: "success",
+      data: blog,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: "error",
+      message: error.message,
+    });
+  }
+};
+
 // get all blogs of user authen
 exports.getAllBlogsUser = async (req, res) => {
   try {
