@@ -57,6 +57,12 @@ const userSchema = new mongoose.Schema({
       default: "#",
     },
   },
+  likedBlogs: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Blog",
+    },
+  ],
   resetPasswordToken: {
     type: String,
   },

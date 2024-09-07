@@ -214,6 +214,70 @@ exports.filterBlogs = async (req, res) => {
   }
 };
 
+// like blog function
+exports.likeBlog = async (req, res) => {
+  try {
+    const blog = await Blog.findById(req.params.id);
+    const user = await User.findById(req.user._id);
+
+    if (!blog) {
+      return res.status(404).json({ message: "Blog not found" });
+    }
+
+    if (!Array.isArray(blog.likes)) {
+      blog.likes = [];
+    }
+
+    const hasLiked = blog.likes.some(
+      (userId) => userId.toString() === req.user._id.toString()
+    );
+    console.log("🚀 ~ exports.likeBlog= ~ hasLiked:", hasLiked)
+
+    if (hasLiked) {
+      blog.likes = blog.likes.filter(
+        (userId) => userId.toString() !== req.user._id.toString()
+      );
+      user.likedBlogs = user.likedBlogs.filter(
+        (blogId) => blogId.toString() !== req.params.id.toString()
+      );
+    } else {
+      blog.likes.push(req.user._id);
+      user.likedBlogs.push(req.params.id);
+    }
+
+    await blog.save();
+    await user.save();
+
+    return res.status(200).json({
+      status: "success",
+      message: hasLiked ? "Blog unliked" : "Blog liked",
+      data: blog.likes,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: "error",
+      message: error.message,
+    });
+  }
+};
+
+// get liked blog
+exports.getLikedBlogs = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).populate("likedBlogs");
+
+    return res.status(200).json({
+      status: "success",
+      data: user.likedBlogs,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: "error",
+      message: error.message,
+    });
+  }
+};
+
 // get all blogs role admin
 exports.getAllBlogsAdmin = async (req, res) => {
   try {

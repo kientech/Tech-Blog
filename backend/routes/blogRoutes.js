@@ -11,6 +11,8 @@ router.get("/filter", blogController.filterBlogs);
 router.get("/lastest", blogController.getLastestBlog);
 router.get("/:id", authMiddleware, blogController.getBlogById);
 router.get("/", authMiddleware, blogController.getAllBlogsUser);
+router.post("/:id/like", authMiddleware, blogController.likeBlog);
+router.get("/user/liked-blogs", authMiddleware, blogController.getLikedBlogs);
 router.get(
   "/all",
   authMiddleware,
