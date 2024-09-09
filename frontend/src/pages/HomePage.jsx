@@ -4,8 +4,8 @@ import SideBar from "../components/Client/SideBar/SideBar";
 function HomePage() {
   return (
     <>
-      <div className="flex gap-x-8">
-        <div className="my-8 w-[70%]">
+      <div className="md:flex gap-x-8">
+        <div className="my-8 md:w-[70%] w-full  ">
           <div className="w-full h-[600px] rounded-lg overflow-hidden">
             <img
               src="https://cdn.dribbble.com/userupload/13964724/file/original-4a3421ac0282a412d8bcc411caa081cc.jpg?resize=1504x1128"
@@ -100,8 +100,8 @@ function HomePage() {
             </div>
           </div>
 
-          <div>
-            <h1 className="font-bold text-3xl text-textBold my-4">Trending</h1>
+          <div className="mt-24">
+            <h1 className="font-bold text-3xl text-textBold my-4 ">Trending</h1>
             <div>
               <div className="p-10 rounded-lg border border-gray-100">
                 <div className="top grid grid-cols-2 gap-x-5">

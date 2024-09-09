@@ -2,6 +2,7 @@ const User = require("../models/userModel");
 const crypto = require("crypto");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const sendEmail = require("../utils/sendEmail");
 
 // register feature
 exports.register = async (req, res) => {
@@ -59,6 +60,8 @@ exports.login = async (req, res) => {
     return res.status(200).json({
       status: "success",
       message: "Login Successfully!",
+      user: user,
+      token: token,
     });
   } catch (error) {
     return res.status(500).json({
@@ -79,10 +82,8 @@ exports.logout = async (req, res) => {
 // forgot password function
 exports.forgotPassword = async (req, res) => {
   try {
-    const token = req.cookies.token;
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const userId = decoded.id;
-    const user = await User.findById(userId);
+    const { email } = req.body;
+    const user = await User.findOne({ email });
 
     if (!user) {
       return res.status(404).json({
@@ -91,19 +92,28 @@ exports.forgotPassword = async (req, res) => {
       });
     }
 
-    // create token to reset password
+    // Create reset token
     const resetToken = crypto.randomBytes(20).toString("hex");
     user.resetPasswordToken = crypto
       .createHash("sha256")
       .update(resetToken)
       .digest("hex");
-    user.resetPasswordExpire = Date.now() + 10 * 60 * 1000;
+    user.resetPasswordExpire = Date.now() + 10 * 60 * 1000; // 10 minutes
 
     await user.save();
 
+    // Send reset email (adjust this according to your email utility)
+    const resetUrl = `http://localhost:5173/reset-password/${resetToken}`;
+
+    await sendEmail({
+      email: user.email,
+      subject: "Password Reset Request",
+      message: `You are receiving this email because you (or someone else) has requested to reset the password. Please make a PUT request to: \n\n${resetUrl}`,
+    });
+
     return res.status(200).json({
       status: "success",
-      resetToken: resetToken,
+      message: "Password reset link sent to email.",
     });
   } catch (error) {
     return res.status(500).json({
@@ -143,7 +153,7 @@ exports.resetPassword = async (req, res) => {
       });
     }
 
-    user.password = password; 
+    user.password = password;
     user.resetPasswordToken = undefined;
     user.resetPasswordExpire = undefined;
 
