@@ -1,5 +1,6 @@
 const express = require("express");
 const blogController = require("../controllers/blogController");
+const upload = require("../middleware/uploadConfig");
 const {
   authMiddleware,
   adminMiddleware,

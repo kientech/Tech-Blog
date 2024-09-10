@@ -10,6 +10,7 @@ import RecoverPassword from "./pages/Authentication/RecoverPassword";
 import ResetPassword from "./pages/Authentication/ResetPassword";
 import RegisterPage from "./pages/Authentication/RegisterPage";
 import Profile from "./pages/Profile";
+import CreateBlogPage from "./pages/Manage Blog/CreateBlogPage";
 
 function App() {
   const location = useLocation();
@@ -30,8 +31,10 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/dashboard/create-blog" element={<CreateBlogPage />} />
         <Route path="/recover-password" element={<RecoverPassword />} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />
+
         <Route path="/web" element={<WebPage />} />
         <Route path="/app" element={<AppPage />} />
       </Routes>

@@ -19,7 +19,8 @@ async function authMiddleware(req, res, next) {
     req.user = user;
     next();
   } catch (error) {
-    res.status(400).send("Inva");
+    console.log("🚀 ~ authMiddleware ~ error:", error)
+    res.status(400).send("Invalid credentials");
   }
 }
 

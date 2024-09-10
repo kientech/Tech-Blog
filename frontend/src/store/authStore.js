@@ -24,8 +24,9 @@ export const useAuthStore = create((set) => ({
   // Tải thông tin người dùng từ localStorage
   loadUserFromLocalStorage: () => {
     const user = JSON.parse(localStorage.getItem("user"));
+    const tokenStorage = JSON.parse(localStorage.getItem("user"));
     const token = Cookies.get("token");
-    if (user && token) {
+    if (user && token && tokenStorage) {
       set({ user, token });
     }
   },
@@ -33,6 +34,6 @@ export const useAuthStore = create((set) => ({
   // Cập nhật thông tin người dùng
   updateUser: (userData) => {
     set({ user: userData });
-    localStorage.setItem("user", JSON.stringify(userData)); // Cập nhật thông tin người dùng trong localStorage
+    localStorage.setItem("user", JSON.stringify(userData)); 
   },
 }));

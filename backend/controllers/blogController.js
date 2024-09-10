@@ -3,14 +3,23 @@ const Blog = require("../models/blogModel");
 const User = require("../models/userModel");
 
 exports.createBlog = async (req, res) => {
-  try {
-    const { title, content, category } = req.body;
+  console.log("hihi");
+  console.log(req.user);
 
+  try {
+    const { title, content, category, image } = req.body;
+    if (!req.user || !req.user._id) {
+      return res.status(401).json({
+        status: "error",
+        message: "Unauthorized",
+      });
+    }
     // Create a new blog
     const blog = new Blog({
       title,
       content,
       category,
+      image,
       author: req.user._id,
       status: "pending",
     });
@@ -25,6 +34,7 @@ exports.createBlog = async (req, res) => {
       data: blog,
     });
   } catch (error) {
+    console.log("🚀 ~ exports.createBlog= ~ error:", error)
     return res.status(500).json({
       status: "error",
       message: error.message,
@@ -231,7 +241,7 @@ exports.likeBlog = async (req, res) => {
     const hasLiked = blog.likes.some(
       (userId) => userId.toString() === req.user._id.toString()
     );
-    console.log("🚀 ~ exports.likeBlog= ~ hasLiked:", hasLiked)
+    console.log("🚀 ~ exports.likeBlog= ~ hasLiked:", hasLiked);
 
     if (hasLiked) {
       blog.likes = blog.likes.filter(
