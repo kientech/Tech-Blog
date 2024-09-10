@@ -30,6 +30,7 @@ exports.login = async (req, res) => {
   const { email, password } = req.body;
 
   try {
+    // Find the user by email
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(400).json({
@@ -38,6 +39,7 @@ exports.login = async (req, res) => {
       });
     }
 
+    // Check if the password matches
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(400).json({
@@ -46,6 +48,7 @@ exports.login = async (req, res) => {
       });
     }
 
+    // Generate JWT token
     const token = jwt.sign(
       { id: user._id, role: user.role },
       process.env.JWT_SECRET,
@@ -54,9 +57,15 @@ exports.login = async (req, res) => {
       }
     );
 
+    // Set the token in an httpOnly cookie
     res.cookie("token", token, {
-      httpOnly: true,
+      httpOnly: true, // Prevents client-side access to the cookie
+      secure: process.env.NODE_ENV === "production", // Send only over HTTPS in production
+      sameSite: "strict", // Protects against CSRF
+      maxAge: 60 * 60 * 1000, // 1 hour expiration
     });
+
+    // Send the user info and token in the response
     return res.status(200).json({
       status: "success",
       message: "Login Successfully!",

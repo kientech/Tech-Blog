@@ -72,7 +72,7 @@ function SideBar() {
         </h1>
         <div className="mt-12">
           {[1, 2, 3, 4, 5].map((item) => (
-            <div className="group">
+            <div className="group" key={item}>
               <div className="w-[80%] h-[1px] bg-gray-50"></div>
               <div className="flex items-center w-full my-4 cursor-pointer">
                 <FaAngleRight className="group-hover:text-buttonColor transition-all" />

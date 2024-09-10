@@ -69,7 +69,7 @@ function HomePage() {
                 </div>
                 <div className="w-1/2 flex-col h-full justify-between space-y-4">
                   {[1, 2, 3, 4, 5].map((item) => (
-                    <div className="flex gap-x-4">
+                    <div className="flex gap-x-4" key={item}>
                       <div className="w-[30%] h-full rounded-lg overflow-hidden">
                         <img
                           src="https://cdn.dribbble.com/userupload/12532315/file/original-17d2e661a6708bc1b0cf70b8e8ed0495.jpg?resize=1504x1128"
@@ -181,7 +181,7 @@ function HomePage() {
                 <div className="bottom mt-8">
                   <div className="grid grid-cols-2 gap-4">
                     {[1, 2, 3, 4].map((item) => (
-                      <div className="flex gap-x-4">
+                      <div className="flex gap-x-4" key={item}>
                         <div className="w-[30%] h-full rounded-lg overflow-hidden">
                           <img
                             src="https://cdn.dribbble.com/userupload/12532315/file/original-17d2e661a6708bc1b0cf70b8e8ed0495.jpg?resize=1504x1128"
@@ -209,7 +209,7 @@ function HomePage() {
             <div className="p-10 rounded-lg border border-gray-100 my-8">
               {[1, 2, 3, 4, 5].map((item) => (
                 <>
-                  <div className="flex gap-x-8 mb-8">
+                  <div className="flex gap-x-8 mb-8" key={item}>
                     <div className="w-1/4 h-full rounded-lg overflow-hidden">
                       <img
                         src="https://cdn.dribbble.com/userupload/12532537/file/original-9b40aa4942f5c0336b8132f60e348015.jpg?resize=1504x1128"
@@ -259,7 +259,7 @@ function HomePage() {
 
       <div className="grid grid-cols-5 gap-x-4">
         {[1, 2, 3, 4, 5].map((item) => (
-          <div>
+          <div key={item}>
             <div className="w-full h-full rounded-lg overflow-hidden">
               <img
                 src="https://cdn.dribbble.com/userupload/12532315/file/original-17d2e661a6708bc1b0cf70b8e8ed0495.jpg?resize=1504x1128"

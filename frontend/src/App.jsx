@@ -9,6 +9,7 @@ import LoginPage from "./pages/Authentication/LoginPage";
 import RecoverPassword from "./pages/Authentication/RecoverPassword";
 import ResetPassword from "./pages/Authentication/ResetPassword";
 import RegisterPage from "./pages/Authentication/RegisterPage";
+import Profile from "./pages/Profile";
 
 function App() {
   const location = useLocation();
@@ -28,6 +29,7 @@ function App() {
         {/* <Route path="/admin" element={role === 'admin' ? <AdminDashboard /> : <HomePage />} /> */}
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
+        <Route path="/profile" element={<Profile />} />
         <Route path="/recover-password" element={<RecoverPassword />} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />
         <Route path="/web" element={<WebPage />} />

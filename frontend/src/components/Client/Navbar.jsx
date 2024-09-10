@@ -10,6 +10,8 @@ import {
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../store/authStore";
 import { toast } from "react-toastify";
+import { api } from "../../utils/api";
+import Loading from "./Loading/Loading";
 
 const Navbar = () => {
   const navigations = [
@@ -21,12 +23,22 @@ const Navbar = () => {
 
   const [open, setOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+
+  const getImageUrl = (avatar) => {
+    if (avatar.startsWith("http")) {
+      return avatar;
+    } else if (avatar.startsWith("/upload")) {
+      return `${api}api/v1${avatar}`;
+    }
+  };
 
   const { user, loadUserFromLocalStorage, logout } = useAuthStore();
 
   useEffect(() => {
     loadUserFromLocalStorage();
+    setLoading(false);
   }, [loadUserFromLocalStorage]);
 
   const handleSignOut = () => {
@@ -101,14 +113,28 @@ const Navbar = () => {
             </Link>
           </div>
 
-          {user ? (
+          {loading ? (
+            <Loading />
+          ) : user ? (
             <div className="relative">
-              <span
-                onClick={toggleDropdown}
-                className="text-sm font-medium text-gray-700 cursor-pointer"
-              >
-                {`Welcome, ${user.fullname}`}
-              </span>
+              <div className="flex items-center gap-x-4">
+                <div
+                  className="w-12 h-12 rounded-full overflow-hidden"
+                  onClick={toggleDropdown}
+                >
+                  <img
+                    src={getImageUrl(user.avatar)}
+                    alt={user.fullname}
+                    className="w-full h-full object-cover hover:scale-105 transition-all"
+                  />
+                </div>
+                <h1
+                  onClick={toggleDropdown}
+                  className="text-md font-medium text-gray-700 cursor-pointer"
+                >
+                  {`Hello, ${user.fullname}`}
+                </h1>
+              </div>
               {dropdownOpen && (
                 <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10">
                   <Link
