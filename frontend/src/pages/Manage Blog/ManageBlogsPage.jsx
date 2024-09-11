@@ -186,12 +186,12 @@ function ManageBlogsPage() {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6">
             <h2 className="text-xl mb-4">Confirm Delete</h2>
-            <p>To confirm the deletion, please type the title of the blog:</p>
+            <p>To confirm the deletion, please type <span className="px-2 py-1 rounded-md bg-gray-100 font-semibold">{blogToDelete.title}</span></p>
             <input
               type="text"
               value={confirmTitle}
               onChange={(e) => setConfirmTitle(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md mt-2"
+              className="w-full px-3 py-2 border border-gray-300 outline-none focus:border-buttonColor rounded-md mt-2"
               placeholder="Enter blog title"
             />
             {errorMessage && (

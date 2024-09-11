@@ -14,6 +14,8 @@ import CreateBlogPage from "./pages/Manage Blog/CreateBlogPage";
 import DashboardLayout from "./pages/Dashboard/DashboardLayout";
 import ManageBlogsPage from "./pages/Manage Blog/ManageBlogsPage";
 import EditBlogPage from "./pages/Manage Blog/EditBlogPage";
+import DashboardStatistic from "./pages/Dashboard/DashboardStatistic";
+import DetailBlogPage from "./pages/DetailBlogPage";
 
 function App() {
   const location = useLocation();
@@ -34,12 +36,13 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/blog/:id" element={<DetailBlogPage />} />
         <Route path="/web" element={<WebPage />} />
         <Route path="/app" element={<AppPage />} />
 
         {/* Dashboard Routes */}
         <Route path="/dashboard" element={<DashboardLayout />}>
-          <Route index element={<HomePage />} /> 
+          <Route index element={<DashboardStatistic />} /> 
           <Route path="create-blog" element={<CreateBlogPage />} />
           <Route path="manage-blogs" element={<ManageBlogsPage />} />
           <Route path="edit-blog/:id" element={<EditBlogPage />} />

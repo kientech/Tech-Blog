@@ -6,8 +6,8 @@ function DashboardSidebar() {
   return (
     <div className="w-64 h-screen bg-white shadow-md text-textBold flex flex-col">
       <div className="w-full mx-auto">
-        <div>
-            <h1>Dashboad</h1>
+        <div className="w-full py-8">
+            <h1 className="text-center font-bold text-textBold text-2xl">Dashboad</h1>
         </div>
         <div className="mt-20 p-8">
             <div className="flex items-center gap-x-4 py-2 px-4 rounded-lg hover:text-buttonColor">

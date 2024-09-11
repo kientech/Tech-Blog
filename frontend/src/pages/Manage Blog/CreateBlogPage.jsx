@@ -9,6 +9,59 @@ import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 import Loading from "../../components/Client/Loading/Loading";
 
+const categories = [
+  "Artificial Intelligence (AI)",
+  "Machine Learning",
+  "Deep Learning",
+  "Data Science",
+  "Big Data",
+  "Internet of Things (IoT)",
+  "Blockchain",
+  "Cybersecurity",
+  "Cloud Computing",
+  "Software Development",
+  "Web Development",
+  "Mobile App Development",
+  "Augmented Reality (AR)",
+  "Virtual Reality (VR)",
+  "DevOps",
+  "Database Management",
+  "Programming Languages",
+  "Tech Startups",
+  "Tech Trends",
+  "Software Engineering",
+  "Embedded Systems",
+  "Networking",
+  "IT Infrastructure",
+  "Digital Transformation",
+  "Robotics",
+  "Quantum Computing",
+  "Tech Reviews",
+  "Tech Gadgets",
+  "Electronics",
+  "Cloud Services",
+  "Enterprise Software",
+  "Data Analytics",
+  "Automation",
+  "Tech Policy",
+  "Tech Education",
+  "Tech Conferences",
+  "Open Source Technology",
+  "Computational Biology",
+  "Human-Computer Interaction (HCI)",
+  "Wearable Technology",
+  "5G Technology",
+  "Software Testing",
+  "UI/UX Design",
+  "Game Development",
+  "Digital Marketing Technology",
+  "Tech Innovations",
+  "Tech Careers",
+  "Tech Ethics",
+  "Tech Investment",
+  "Technology and Society",
+];
+
 function CreateBlogPage() {
   const navigate = useNavigate();
   const [title, setTitle] = useState("");
@@ -89,25 +142,13 @@ function CreateBlogPage() {
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700">
-            Image:
+            Image URL:
           </label>
           <input
             type="text"
             value={image}
             onChange={(e) => setImage(e.target.value)}
             className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-            required
-          />
-        </div>
-        {/* <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Image:
-          </label>
-          <input
-            type="file"
-            onChange={handleImageChange}
-            className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:border file:border-gray-300 file:rounded-md file:text-sm file:font-semibold file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200"
-            accept="image/*"
             required
           />
           {imagePreview && (
@@ -117,18 +158,26 @@ function CreateBlogPage() {
               className="mt-4 max-w-full h-auto rounded-md shadow-sm"
             />
           )}
-        </div> */}
+        </div>
         <div>
           <label className="block text-sm font-medium text-gray-700">
             Category:
           </label>
-          <input
-            type="text"
+          <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
             className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             required
-          />
+          >
+            <option value="" disabled>
+              Select a category
+            </option>
+            {categories.map((cat, index) => (
+              <option key={index} value={cat}>
+                {cat}
+              </option>
+            ))}
+          </select>
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700">

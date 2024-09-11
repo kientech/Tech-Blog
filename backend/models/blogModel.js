@@ -39,7 +39,7 @@ const blogSchema = new mongoose.Schema({
   status: {
     type: String,
     enum: ["pending", "approved"],
-    default: "pending",
+    default: "approved",
   },
   updatedAt: {
     type: Date,

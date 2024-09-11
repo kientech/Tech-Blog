@@ -3,9 +3,6 @@ const Blog = require("../models/blogModel");
 const User = require("../models/userModel");
 
 exports.createBlog = async (req, res) => {
-  console.log("hihi");
-  console.log(req.user);
-
   try {
     const { title, content, category, image } = req.body;
     if (!req.user || !req.user._id) {
@@ -21,7 +18,7 @@ exports.createBlog = async (req, res) => {
       category,
       image,
       author: req.user._id,
-      status: "pending",
+      status: "approved",
     });
 
     await blog.save();
@@ -82,6 +79,23 @@ exports.getAllBlogsUser = async (req, res) => {
     });
   }
 };
+
+// get all blog
+exports.getAllBlogs = async (req, res) => {
+  try {
+    const blogs = await Blog.find();
+    return res.status(200).json({
+      status: "success",
+      length: blogs.length,
+      data: blogs,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: "error",
+      message: error.message,
+    });
+  }
+}
 
 // edit blog by user
 exports.editBlog = async (req, res) => {

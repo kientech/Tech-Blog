@@ -8,7 +8,7 @@ const {
 const router = express.Router();
 
 router.get("/profile", authMiddleware, userController.getUser);
-router.get("/users/:id", authMiddleware, userController.getUser);
+router.get("/user/:id", userController.getUserById);
 router.patch(
   "/profile",
   authMiddleware,

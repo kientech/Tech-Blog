@@ -138,10 +138,10 @@ const Navbar = () => {
               {dropdownOpen && (
                 <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10">
                   <Link
-                    to={"/dashboard/create-blog"}
+                    to={"/dashboard"}
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                   >
-                    Create New Blog
+                    Dashboard
                   </Link>
                   <Link
                     to="/profile"
