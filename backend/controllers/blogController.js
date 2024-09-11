@@ -34,7 +34,7 @@ exports.createBlog = async (req, res) => {
       data: blog,
     });
   } catch (error) {
-    console.log("🚀 ~ exports.createBlog= ~ error:", error)
+    console.log("🚀 ~ exports.createBlog= ~ error:", error);
     return res.status(500).json({
       status: "error",
       message: error.message,

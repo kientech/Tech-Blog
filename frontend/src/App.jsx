@@ -11,11 +11,14 @@ import ResetPassword from "./pages/Authentication/ResetPassword";
 import RegisterPage from "./pages/Authentication/RegisterPage";
 import Profile from "./pages/Profile";
 import CreateBlogPage from "./pages/Manage Blog/CreateBlogPage";
+import DashboardLayout from "./pages/Dashboard/DashboardLayout";
+import ManageBlogsPage from "./pages/Manage Blog/ManageBlogsPage";
+import EditBlogPage from "./pages/Manage Blog/EditBlogPage";
 
 function App() {
   const location = useLocation();
 
-  // Determine if the current route is '/login'
+  // Determine if the current route is a login-related page
   const isLoginPage =
     location.pathname === "/login" ||
     location.pathname === "/register" ||
@@ -26,17 +29,25 @@ function App() {
     <div className="w-[90%] mx-auto">
       {!isLoginPage && <Navbar />}
       <Routes>
+        {/* Public Routes */}
         <Route path="/" element={<HomePage />} />
-        {/* <Route path="/admin" element={role === 'admin' ? <AdminDashboard /> : <HomePage />} /> */}
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/profile" element={<Profile />} />
-        <Route path="/dashboard/create-blog" element={<CreateBlogPage />} />
-        <Route path="/recover-password" element={<RecoverPassword />} />
-        <Route path="/reset-password/:token" element={<ResetPassword />} />
-
         <Route path="/web" element={<WebPage />} />
         <Route path="/app" element={<AppPage />} />
+
+        {/* Dashboard Routes */}
+        <Route path="/dashboard" element={<DashboardLayout />}>
+          <Route index element={<HomePage />} /> 
+          <Route path="create-blog" element={<CreateBlogPage />} />
+          <Route path="manage-blogs" element={<ManageBlogsPage />} />
+          <Route path="edit-blog/:id" element={<EditBlogPage />} />
+        </Route>
+
+        {/* Authentication Routes */}
+        <Route path="/recover-password" element={<RecoverPassword />} />
+        <Route path="/reset-password/:token" element={<ResetPassword />} />
       </Routes>
       {!isLoginPage && <Footer />}
     </div>

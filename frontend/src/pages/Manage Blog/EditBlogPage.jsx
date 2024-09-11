@@ -6,11 +6,12 @@ import { useAuthStore } from "../../store/authStore";
 import { toast } from "react-toastify";
 import { api } from "../../utils/api";
 import Cookies from "js-cookie";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Loading from "../../components/Client/Loading/Loading";
 
-function CreateBlogPage() {
+function EditBlogPage() {
   const navigate = useNavigate();
+  const { id } = useParams(); // Get the blog ID from the URL parameters
   const [title, setTitle] = useState("");
   const [image, setImage] = useState("");
   const [category, setCategory] = useState("");
@@ -18,7 +19,6 @@ function CreateBlogPage() {
   const [loading, setLoading] = useState(true);
   const [imagePreview, setImagePreview] = useState(""); // State for image preview
   const token = Cookies.get("token");
-
   const { user, loadUserFromLocalStorage } = useAuthStore();
 
   useEffect(() => {
@@ -27,12 +27,32 @@ function CreateBlogPage() {
       if (!user && !token) {
         navigate("/login");
       } else {
-        setLoading(false);
+        fetchBlogData(); // Fetch blog data on load
       }
     };
 
     checkAuth();
   }, [loadUserFromLocalStorage]);
+
+  const fetchBlogData = async () => {
+    try {
+      const response = await axios.get(`${api}api/v1/blogs/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const blog = response.data.data;
+      setTitle(blog.title);
+      setImage(blog.image);
+      setCategory(blog.category);
+      setContent(blog.content);
+      setImagePreview(blog.image); // Set image preview from existing image
+      setLoading(false);
+    } catch (error) {
+      toast.error("Error fetching blog data!");
+      console.error("There was an error fetching the blog data!", error);
+    }
+  };
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -53,17 +73,20 @@ function CreateBlogPage() {
     };
 
     try {
-      const response = await axios.post(`${api}api/v1/blogs/create`, formData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      console.log("🚀 ~ handleSubmit ~ response:", response);
-      toast.success("Created Blog Successfully!");
+      const response = await axios.patch(
+        `${api}api/v1/blogs/edit/${id}`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      toast.success("Updated Blog Successfully!");
       navigate("/dashboard/manage-blogs");
     } catch (error) {
-      toast.error("Error creating Blog!");
-      console.error("There was an error creating the blog!", error);
+      toast.error("Error updating Blog!");
+      console.error("There was an error updating the blog!", error);
     }
   };
 
@@ -73,7 +96,7 @@ function CreateBlogPage() {
 
   return (
     <div className="w-full mx-auto p-6 bg-white rounded-lg">
-      <h1 className="text-2xl font-bold mb-4">Create a New Blog Post</h1>
+      <h1 className="text-2xl font-bold mb-4">Edit Blog Post</h1>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className="block text-sm font-medium text-gray-700">
@@ -98,18 +121,6 @@ function CreateBlogPage() {
             className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             required
           />
-        </div>
-        {/* <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Image:
-          </label>
-          <input
-            type="file"
-            onChange={handleImageChange}
-            className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:border file:border-gray-300 file:rounded-md file:text-sm file:font-semibold file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200"
-            accept="image/*"
-            required
-          />
           {imagePreview && (
             <img
               src={imagePreview}
@@ -117,7 +128,7 @@ function CreateBlogPage() {
               className="mt-4 max-w-full h-auto rounded-md shadow-sm"
             />
           )}
-        </div> */}
+        </div>
         <div>
           <label className="block text-sm font-medium text-gray-700">
             Category:
@@ -145,11 +156,11 @@ function CreateBlogPage() {
           type="submit"
           className="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
         >
-          Create Blog
+          Update Blog
         </button>
       </form>
     </div>
   );
 }
 
-export default CreateBlogPage;
+export default EditBlogPage;
