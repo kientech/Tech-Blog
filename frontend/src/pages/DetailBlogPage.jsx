@@ -115,7 +115,7 @@ function DetailBlogPage() {
             Tech Blog
           </Link>
           <span className="block w-1 h-1 rounded-full bg-buttonColor"></span>
-          <Link to={`/${blog.category}`} className="text-sm text-buttonColor">
+          <Link to={`/category/${blog.category}`} className="text-sm text-buttonColor">
             {blog.category}
           </Link>
           <span className="block w-1 h-1 rounded-full bg-buttonColor"></span>

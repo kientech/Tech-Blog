@@ -9,11 +9,12 @@ function LatestBlogItem({ target, image, category, title, author, createdAt }) {
           src={image}
           alt=""
           className="w-full h-full rounded-lg object-cover hover:scale-105 transition-all relative"
+          // loading="lazy"
         />
         <div className="absolute bottom-24 p-10 w-[700px] leading-relaxed">
-          <span className="px-4 py-2 rounded-full bg-buttonColor text-md text-white inline-block mb-8">
+          <Link to={`/category/${category}`} className="px-4 py-2 rounded-full bg-buttonColor text-md text-white inline-block mb-8">
             {category}
-          </span>
+          </Link>
           <h1 className="font-bold text-4xl text-white">{title}</h1>
           <div className="flex items-center mt-4">
             <span className="text-white font-base text-md">{author}</span>

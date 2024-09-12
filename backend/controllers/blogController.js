@@ -1,6 +1,7 @@
 const express = require("express");
 const Blog = require("../models/blogModel");
 const User = require("../models/userModel");
+// const slug = require("slugify")
 
 exports.createBlog = async (req, res) => {
   try {
@@ -347,6 +348,30 @@ exports.getTrendingBlogs = async (req, res) => {
   }
 };
 
+// get blog by category
+exports.getBlogsByCategory = async (req, res) => {
+  try {
+    const category = req.params.category;
+
+    const blogs = await Blog.find({ category: category });
+
+    if (blogs.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No blogs found for this category" });
+    }
+
+    return res.status(200).json({
+      status: "success",
+      length: blogs.length,
+      data: blogs,
+    });
+  } catch (error) {
+    console.error("Error fetching blogs by category:", error);
+    return res.status(500).json({ message: "Server error" });
+  }
+};
+
 // get liked blog
 exports.getLikedBlogs = async (req, res) => {
   try {
@@ -354,6 +379,7 @@ exports.getLikedBlogs = async (req, res) => {
 
     return res.status(200).json({
       status: "success",
+      length: user.likedBlogs.length,
       data: user.likedBlogs,
     });
   } catch (error) {

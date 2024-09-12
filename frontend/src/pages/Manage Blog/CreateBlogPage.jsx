@@ -90,9 +90,14 @@ function CreateBlogPage() {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setImage(URL.createObjectURL(file));
-      setImagePreview(URL.createObjectURL(file));
+      const imageUrl = URL.createObjectURL(file);
+      setImage(imageUrl);
+      setImagePreview(imageUrl);
     }
+  };
+
+  const handleImageUrlBlur = () => {
+    setImagePreview(image);
   };
 
   const handleSubmit = async (e) => {
@@ -111,7 +116,6 @@ function CreateBlogPage() {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log("🚀 ~ handleSubmit ~ response:", response);
       toast.success("Created Blog Successfully!");
       navigate("/dashboard/manage-blogs");
     } catch (error) {
@@ -125,9 +129,11 @@ function CreateBlogPage() {
   }
 
   return (
-    <div className="w-full mx-auto p-6 bg-white rounded-lg">
-      <h1 className="text-2xl font-bold mb-4">Create a New Blog Post</h1>
-      <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="w-full  mx-auto p-6 bg-white rounded-lg">
+      <h1 className="text-3xl font-bold mb-6 text-gray-800">
+        Create a New Blog Post
+      </h1>
+      <form onSubmit={handleSubmit} className="space-y-6">
         <div>
           <label className="block text-sm font-medium text-gray-700">
             Title:
@@ -136,7 +142,7 @@ function CreateBlogPage() {
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             required
           />
         </div>
@@ -148,7 +154,8 @@ function CreateBlogPage() {
             type="text"
             value={image}
             onChange={(e) => setImage(e.target.value)}
-            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            onBlur={handleImageUrlBlur}
+            className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             required
           />
           {imagePreview && (
@@ -163,21 +170,19 @@ function CreateBlogPage() {
           <label className="block text-sm font-medium text-gray-700">
             Category:
           </label>
-          <select
+          <input
+            list="category-list"
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            placeholder="Select a category"
             required
-          >
-            <option value="" disabled>
-              Select a category
-            </option>
+          />
+          <datalist id="category-list">
             {categories.map((cat, index) => (
-              <option key={index} value={cat}>
-                {cat}
-              </option>
+              <option key={index} value={cat} />
             ))}
-          </select>
+          </datalist>
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700">
@@ -192,7 +197,7 @@ function CreateBlogPage() {
         </div>
         <button
           type="submit"
-          className="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          className="mt-6 w-full inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
         >
           Create Blog
         </button>

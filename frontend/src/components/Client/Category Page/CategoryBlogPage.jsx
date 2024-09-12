@@ -1,42 +1,48 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { api } from "../../../utils/api";
-import AllLatestBlogItem from "./AllLatestBlogItem";
+import AllLatestBlogItem from "../All Latest Blog/AllLatestBlogItem";
 import parse from "html-react-parser";
 import { formatDate } from "../../../utils/formatDate";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import { useParams } from "react-router-dom";
 
-function AllLatestComponent() {
-  const [latests, setLatests] = useState([]);
+function CategoryBlogPage() {
+  const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { category } = useParams();
 
   useEffect(() => {
     const fetchLatestBlogs = async () => {
+      setLoading(true);
+
       try {
-        const res = await axios.get(`${api}api/v1/blogs/latest?limit=5`);
+        setBlogs([]);
+
+        const res = await axios.get(`${api}api/v1/blogs/category/${category}`);
         const blogs = res.data.data;
 
         // Fetch author data for each blog
         const blogsWithAuthors = await Promise.all(
           blogs.map(async (blog) => {
             const authorRes = await axios.get(
-              `${api}api/v1/users/user/${blog.author._id}`
+              `${api}api/v1/users/user/${blog.author}`
             );
             return { ...blog, author: authorRes.data.data };
           })
         );
 
-        setLatests(blogsWithAuthors);
-        setLoading(false); // Data has been fetched
+        setBlogs(blogsWithAuthors);
       } catch (error) {
-        console.log("🚀 ~ useEffect ~ error:", error);
-        setLoading(false); // Data fetching failed
+        console.error("Error fetching blogs:", error);
+      } finally {
+        setLoading(false); // Ensure loading state is updated
       }
     };
 
     fetchLatestBlogs();
-  }, []);
+  }, [category]); // Dependency on category to refetch when it changes
 
   const getImageUrl = (avatar) => {
     if (avatar.startsWith("http")) {
@@ -68,7 +74,7 @@ function AllLatestComponent() {
           ))}
         </div>
       ) : (
-        latests.map((blog) => (
+        blogs.map((blog) => (
           <AllLatestBlogItem
             key={blog._id}
             target={blog.slug ? `/blog/${blog.slug}` : "/error"}
@@ -85,4 +91,4 @@ function AllLatestComponent() {
   );
 }
 
-export default AllLatestComponent;
+export default CategoryBlogPage;

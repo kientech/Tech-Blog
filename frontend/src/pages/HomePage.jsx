@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import SideBar from "../components/Client/SideBar/SideBar";
 import LatestBlogComponent from "../components/Client/Lastest Blog/LatestBlogComponent";
 import AllLatestComponent from "../components/Client/All Latest Blog/AllLatestComponent";
@@ -6,7 +6,9 @@ import EditorByUserComponent from "../components/Client/EditorByUser/EditorByUse
 import AllTrendingBlogsComponent from "../components/Client/AllTrendingBlogs/AllTrendingBlogsComponent";
 
 function HomePage() {
-  const items = [1, 2, 3, 4, 5];
+  useEffect(() => {
+    document.title = "Home | Tech Blog"
+  }, [])
 
   return (
     <>

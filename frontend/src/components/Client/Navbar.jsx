@@ -16,8 +16,12 @@ import Loading from "./Loading/Loading";
 const Navbar = () => {
   const navigations = [
     { id: 1, name: "Home", to: "/" },
-    { id: 2, name: "Web", to: "/web" },
-    { id: 3, name: "App", to: "/app" },
+    {
+      id: 2,
+      name: "Mobile App Development",
+      to: "/category/Mobile App Development",
+    },
+    { id: 3, name: "Blockchain", to: "/category/Blockchain" },
     { id: 4, name: "Machine Learning", to: "/machine-learning" },
   ];
 
@@ -136,10 +140,10 @@ const Navbar = () => {
                 </h1>
               </div>
               {dropdownOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10">
+                <div className="absolute right-0 mt-2 w-64 bg-white rounded-md shadow-lg z-10">
                   <Link
                     to={"/dashboard"}
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-buttonColor transition-all"
                   >
                     Dashboard
                   </Link>

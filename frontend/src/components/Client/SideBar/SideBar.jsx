@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import PopularRecentTab from "../TabContent/PopularRecentTab";
 import { Link } from "react-router-dom";
 import {
@@ -8,9 +8,140 @@ import {
   FaLinkedinIn,
   FaTwitter,
 } from "react-icons/fa";
+import axios from "axios";
+import { api } from "../../../utils/api";
+import Loading from "../Loading/Loading";
+import { getImageUrl } from "../../../utils/getImageUrl";
+import { formatDate } from "../../../utils/formatDate";
+
+// Skeleton Components
+const SkeletonLoader = ({ className }) => (
+  <div className={`animate-pulse ${className}`}>
+    <div className="h-6 bg-gray-300 rounded mb-4"></div>
+    <div className="h-4 bg-gray-300 rounded mb-2"></div>
+    <div className="h-4 bg-gray-300 rounded"></div>
+  </div>
+);
+
+const SidebarSkeleton = () => (
+  <div className="mt-8">
+    <div className="shadow-sm w-full h-[600px] p-10 border border-gray-100 rounded-lg">
+      <SkeletonLoader className="w-full h-full" />
+    </div>
+
+    <div className="w-full p-4 mt-16 border border-gray-100 rounded-lg">
+      <SkeletonLoader className="w-full h-24" />
+      <SkeletonLoader className="w-full h-10 mt-4" />
+      <SkeletonLoader className="w-full h-10 mt-4" />
+    </div>
+
+    <div className="p-8 border border-gray-100 rounded-lg mt-8">
+      <SkeletonLoader className="w-full h-8" />
+      <div className="space-y-4 mt-4">
+        {[1, 2, 3, 4].map((_, index) => (
+          <SkeletonLoader key={index} className="w-full h-16" />
+        ))}
+      </div>
+    </div>
+
+    <div className="p-10 border border-gray-100 rounded-lg mt-8">
+      <SkeletonLoader className="w-full h-8" />
+      <div className="space-y-4 mt-4">
+        {[1, 2, 3, 4, 5].map((_, index) => (
+          <SkeletonLoader key={index} className="w-full h-8" />
+        ))}
+      </div>
+    </div>
+
+    <div className="p-10 border border-gray-100 rounded-lg mt-8">
+      <SkeletonLoader className="w-full h-8" />
+      <SkeletonLoader className="w-full h-12 mt-4" />
+    </div>
+
+    <div className="mt-8">
+      <SkeletonLoader className="w-full h-[500px]" />
+    </div>
+  </div>
+);
 
 function SideBar() {
-  return (
+  const [trendingBlogs, setTrendingBlogs] = useState([]);
+  const [latestBlogs, setLatests] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchTrendingBlogs = async () => {
+      try {
+        const res = await axios.get(`${api}api/v1/blogs/trending?count=6`);
+        const blogs = res.data.data;
+
+        // Fetch author data for each blog
+        const blogsWithAuthors = await Promise.all(
+          blogs.map(async (blog) => {
+            try {
+              const authorRes = await axios.get(
+                `${api}api/v1/users/user/${blog.author}`
+              );
+              return { ...blog, author: authorRes.data.data };
+            } catch (authorError) {
+              console.log(
+                `Failed to fetch author for blog ${blog._id}:`,
+                authorError
+              );
+              return { ...blog, author: null }; // Handle the case where author data is not available
+            }
+          })
+        );
+
+        setTrendingBlogs(blogsWithAuthors);
+      } catch (error) {
+        console.log("Error fetching trending blogs:", error);
+      } finally {
+        setLoading(false); // Ensure loading is set to false even if an error occurs
+      }
+    };
+
+    fetchTrendingBlogs();
+  }, []);
+
+  useEffect(() => {
+    const fetchLatestBlogs = async () => {
+      try {
+        const res = await axios.get(`${api}api/v1/blogs/latest?limit=5`);
+        const blogs = res.data.data;
+
+        // Fetch author data for each blog
+        const blogsWithAuthors = await Promise.all(
+          blogs.map(async (blog) => {
+            try {
+              const authorRes = await axios.get(
+                `${api}api/v1/users/user/${blog.author._id}`
+              );
+              return { ...blog, author: authorRes.data.data };
+            } catch (authorError) {
+              console.log(
+                `Failed to fetch author for blog ${blog._id}:`,
+                authorError
+              );
+              return { ...blog, author: null }; // Handle the case where author data is not available
+            }
+          })
+        );
+
+        setLatests(blogsWithAuthors);
+      } catch (error) {
+        console.log("Error fetching latest blogs:", error);
+      } finally {
+        setLoading(false); // Ensure loading is set to false even if an error occurs
+      }
+    };
+
+    fetchLatestBlogs();
+  }, []);
+
+  return loading ? (
+    <SidebarSkeleton />
+  ) : (
     <div className="mt-8">
       <div className="shadow-sm w-full h-[600px] p-10 border border-gray-100 rounded-lg">
         <PopularRecentTab />
@@ -25,16 +156,32 @@ function SideBar() {
           consequatur hic! A, minima ea dolorum voluptate amet aliquam!
         </p>
         <div className="md:flex md:items-center md:gap-x-4 md:justify-center my-4">
-          <Link className="hover:text-buttonColor transition-all">
+          <Link
+            to="#"
+            aria-label="Facebook"
+            className="hover:text-buttonColor transition-all"
+          >
             <FaFacebookF />
           </Link>
-          <Link className="hover:text-buttonColor transition-all">
+          <Link
+            to="#"
+            aria-label="Instagram"
+            className="hover:text-buttonColor transition-all"
+          >
             <FaInstagram />
           </Link>
-          <Link className="hover:text-buttonColor transition-all">
+          <Link
+            to="#"
+            aria-label="Twitter"
+            className="hover:text-buttonColor transition-all"
+          >
             <FaTwitter />
           </Link>
-          <Link className="hover:text-buttonColor transition-all">
+          <Link
+            to="#"
+            aria-label="LinkedIn"
+            className="hover:text-buttonColor transition-all"
+          >
             <FaLinkedinIn />
           </Link>
         </div>
@@ -46,20 +193,21 @@ function SideBar() {
         </h1>
 
         <div className="flex flex-col space-y-6">
-          {[1, 2, 3, 4].map((item) => (
-            <div className="flex gap-x-4 w-full group" key={item}>
+          {latestBlogs.map((blog) => (
+            <div className="flex gap-x-4 w-full group" key={blog?._id}>
               <div className="w-16 h-16 rounded-full overflow-hidden ">
                 <img
-                  src="https://cdn.dribbble.com/userupload/13496904/file/original-8ced0cf5cb374000f6d98d64f50d507b.png?resize=1504x1128"
-                  alt="img"
+                  src={getImageUrl(blog?.image)}
+                  alt={`Popular Post ${blog?.title}`}
                   className="rounded-full object-cover w-full h-full transition-all group-hover:scale-105 block cursor-pointer"
+                  loading="lazy"
                 />
               </div>
               <div className="flex-1">
                 <h3 className="text-md font-semibold cursor-pointer group-hover:text-buttonColor ">
-                  3 Easy Ways To Make Your iPhone Faster
+                  {blog?.title}
                 </h3>
-                <p className="text-gray-500">August 10, 2022</p>
+                <p className="text-gray-500">{formatDate(blog?.createdAt)}</p>
               </div>
             </div>
           ))}
@@ -96,12 +244,16 @@ function SideBar() {
 
         <form>
           <input
-            type="text"
+            type="email"
             placeholder="example@gmail.com"
             className="p-2 px-6 block w-full rounded-full border border-gray-100 focus:border-buttonColor outline-none text-buttonColor"
+            aria-label="Email address"
           />
-          <button className="block my-4 px-4 py-2 rounded-full bg-buttonColor text-md text-textWhite w-full">
-            Subcribe
+          <button
+            type="submit"
+            className="block my-4 px-4 py-2 rounded-full bg-buttonColor text-md text-textWhite w-full"
+          >
+            Subscribe
           </button>
         </form>
       </div>
@@ -121,10 +273,10 @@ function SideBar() {
             #app
           </button>
           <button className="py-2 px-4 rounded-lg border border-gray-100 text-textBase text-sm">
-            #technology
+            #design
           </button>
           <button className="py-2 px-4 rounded-lg border border-gray-100 text-textBase text-sm">
-            #technology
+            #development
           </button>
         </div>
       </div>
@@ -133,8 +285,9 @@ function SideBar() {
         <div className="w-full h-[500px] rounded-lg overflow-hidden">
           <img
             src="https://cdn.dribbble.com/userupload/12323819/file/original-a9feadb89946ddd142f612244eb9d25e.png?resize=1504x1128"
-            alt=""
+            alt="Sidebar promotional image"
             className="w-full h-full rounded-lg hover:scale-105 transition-all object-cover"
+            loading="lazy"
           />
         </div>
       </div>

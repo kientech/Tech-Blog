@@ -6,6 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../store/authStore";
 import { toast } from "react-toastify";
 import Loading from "../../components/Client/Loading/Loading";
+import { FaRegEdit, FaRegEye, FaRegTrashAlt } from "react-icons/fa";
 
 function ManageBlogsPage() {
   const token = Cookies.get("token");
@@ -89,11 +90,11 @@ function ManageBlogsPage() {
       <h1 className="text-2xl font-bold mb-4">Manage Blogs</h1>
       {loading && <Loading borderTopColor="buttonColor" />}
       {error && <p className="text-red-500">Error: {error}</p>}
-      <table className="min-w-full bg-white border border-gray-200 rounded-lg text-center">
+      <table className="min-w-full bg-white border border-gray-300 rounded-lg shadow-sm overflow-hidden">
         <thead>
-          <tr className="bg-gray-100 border-b text-center">
+          <tr className="border-b bg-gray-100">
             <th className="px-4 py-2 text-center border-r border-gray-300">
-              STT
+              N.o.
             </th>
             <th className="px-4 py-2 text-center border-r border-gray-300">
               Title
@@ -122,26 +123,32 @@ function ManageBlogsPage() {
                   (index + 1) % 2 === 0 ? "bg-green-50" : ""
                 }`}
               >
-                <td className="px-4 py-2 border-r border-gray-300">
+                <td className="px-2 py-2 text-center border-r border-gray-300 text-sm">
                   {index + 1}
                 </td>
-                <td className="px-4 py-2 border-r border-gray-300">
-                  {blog.title}
+                <td
+                  className="px-2 py-2 text-center text-sm border-r border-gray-300"
+                  title={blog?.title}
+                >
+                  {blog.title.slice(0, 20) + "..."}
                 </td>
-                <td className="px-4 py-2 border-r border-gray-300">
+                <td
+                  className="px-2 py-2 text-center text-sm border-r border-gray-300"
+                  title={blog.category}
+                >
                   {blog.category}
                 </td>
-                <td className="px-4 py-2 border-r border-gray-300">
+                <td className="px-2 py-2 text-center text-sm border-r border-gray-300">
                   {user.fullname}
                 </td>
-                <td className="px-4 py-2 border-r border-gray-300">
+                <td className="px-2 py-2 text-center text-sm border-r border-gray-300">
                   <img
                     src={blog.image}
                     alt={blog.title}
-                    className="w-8 h-8 object-cover rounded-md"
+                    className="w-full h-8 object-cover rounded-md"
                   />
                 </td>
-                <td className="px-4 py-2 border-r border-gray-300">
+                <td className="px-2 py-2 text-center text-sm border-r border-gray-300">
                   <span
                     className={`px-2 py-1 rounded ${
                       blog.status === "approved"
@@ -149,21 +156,27 @@ function ManageBlogsPage() {
                         : "bg-yellow-100 text-yellow-800"
                     }`}
                   >
-                    {blog.status}
+                    {blog.status === "approved" ? "Approved" : "Pending"}
                   </span>
                 </td>
-                <td className="px-4 py-2">
+                <td className="px-2 py-2 text-center text-sm">
                   <button
                     onClick={() => handleEdit(blog._id)}
-                    className="text-blue-500 hover:underline mr-2"
+                    className="text-blue-500 hover:bg-blue-100 mr-2 p-2 rounded-lg bg-blue-50"
                   >
-                    Edit
+                    <FaRegEdit />
                   </button>
                   <button
                     onClick={() => openConfirmModal(blog)}
-                    className="text-red-500 hover:underline"
+                    className="text-red-500 p-2 rounded-lg mr-2 hover:bg-red-100 bg-red-50"
                   >
-                    Delete
+                    <FaRegTrashAlt /> 
+                  </button>
+                  <button
+                    onClick={() => navigate(`/blog/${blog.slug}`)}
+                    className="text-green-500 p-2 rounded-lg hover:bg-green-100 bg-green-50"
+                  >
+                    <FaRegEye /> 
                   </button>
                 </td>
               </tr>
@@ -186,7 +199,12 @@ function ManageBlogsPage() {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6">
             <h2 className="text-xl mb-4">Confirm Delete</h2>
-            <p>To confirm the deletion, please type <span className="px-2 py-1 rounded-md bg-gray-100 font-semibold">{blogToDelete.title}</span></p>
+            <p>
+              To confirm the deletion, please type{" "}
+              <span className="px-2 py-1 rounded-md bg-gray-100 font-semibold">
+                {blogToDelete.title}
+              </span>
+            </p>
             <input
               type="text"
               value={confirmTitle}

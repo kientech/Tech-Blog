@@ -12,6 +12,7 @@ router.get("/all", blogController.getAllBlogs);
 router.get("/filter", blogController.filterBlogs);
 router.get("/latest", blogController.getLastestBlog);
 router.get("/trending", blogController.getTrendingBlogs);
+router.get("/category/:category", blogController.getBlogsByCategory);
 // router.get("/:id", blogController.getBlogById);
 router.get("/:slug", blogController.getBlogBySlug);
 router.get("/", authMiddleware, blogController.getAllBlogsUser);
