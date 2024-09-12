@@ -16,6 +16,7 @@ import ManageBlogsPage from "./pages/Manage Blog/ManageBlogsPage";
 import EditBlogPage from "./pages/Manage Blog/EditBlogPage";
 import DashboardStatistic from "./pages/Dashboard/DashboardStatistic";
 import DetailBlogPage from "./pages/DetailBlogPage";
+import NotFoundPage from "./pages/NotFoundPage";
 
 function App() {
   const location = useLocation();
@@ -36,7 +37,7 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/profile" element={<Profile />} />
-        <Route path="/blog/:id" element={<DetailBlogPage />} />
+        <Route path="/blog/:slug" element={<DetailBlogPage />} />
         <Route path="/web" element={<WebPage />} />
         <Route path="/app" element={<AppPage />} />
 
@@ -51,6 +52,7 @@ function App() {
         {/* Authentication Routes */}
         <Route path="/recover-password" element={<RecoverPassword />} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />
+      <Route path="*" element={<NotFoundPage />} />
       </Routes>
       {!isLoginPage && <Footer />}
     </div>

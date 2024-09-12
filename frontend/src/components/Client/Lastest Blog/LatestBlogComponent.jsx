@@ -8,6 +8,7 @@ import "react-loading-skeleton/dist/skeleton.css";
 
 function LatestBlogComponent() {
   const [latest, setLatest] = useState(null); // Change initial state to null
+  console.log("🚀 ~ LatestBlogComponent ~ latest:", latest);
   const [author, setAuthor] = useState(null);
   const [error, setError] = useState(null);
 
@@ -60,7 +61,7 @@ function LatestBlogComponent() {
 
   return (
     <LatestBlogItem
-      target={`/blog/${latest._id}`}
+      target={latest?.slug ? `/blog/${latest.slug}` : "/error"}
       image={latest.image}
       category={latest.category}
       title={latest.title}

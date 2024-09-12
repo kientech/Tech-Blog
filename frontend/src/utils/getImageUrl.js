@@ -1,3 +1,4 @@
+import { api } from "./api";
 export const getImageUrl = (avatar) => {
   if (avatar.startsWith("http")) {
     return avatar;

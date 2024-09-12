@@ -47,6 +47,7 @@ function AllLatestComponent() {
       {latests.map((blog) => (
         <AllLatestBlogItem
           key={blog._id}
+          target={blog.slug ? `/blog/${blog.slug}` : "/error"}
           image={blog.image}
           author={blog.author.fullname}
           title={blog.title}

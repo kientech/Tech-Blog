@@ -7,57 +7,105 @@ import Loading from "../components/Client/Loading/Loading";
 import parse from "html-react-parser";
 import SideBar from "../components/Client/SideBar/SideBar";
 import ModalShare from "../components/Client/Share Blog/ModalShare";
-import { FaShareAlt } from "react-icons/fa";
+import { FaHeart, FaRegHeart, FaShareAlt } from "react-icons/fa";
 import { getImageUrl } from "../utils/getImageUrl";
+import Cookies from "js-cookie";
+import { toast } from "react-toastify";
+import { useAuthStore } from "../store/authStore";
 
 function DetailBlogPage() {
   const [blog, setBlog] = useState(null);
   const [author, setAuthor] = useState(null);
   const [error, setError] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false); // State to manage the modal
-  const { id } = useParams();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [loading, setLoading] = useState(true); // New state for loading status
+  const { slug } = useParams();
+  const token = Cookies.get("token");
+  const { user, updateUser } = useAuthStore();
 
   useEffect(() => {
     const fetchBlogDetails = async () => {
       try {
-        // Fetch blog details
-        const blogResponse = await axios.get(`${api}api/v1/blogs/${id}`);
-        setBlog(blogResponse.data.data);
+        const blogResponse = await axios.get(`${api}api/v1/blogs/${slug}`);
+        const blogData = blogResponse.data.data;
+        setBlog(blogData);
 
-        // Fetch author details
-        const authorId = blogResponse.data.data.author;
+        document.title = blogData.title || "Default Blog Title";
+
+        const authorId = blogData.author;
         const authorResponse = await axios.get(
           `${api}api/v1/users/user/${authorId}`
         );
         setAuthor(authorResponse.data.data);
+
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching blog details:", error);
         setError("Failed to fetch blog details.");
+        document.title = "Error Loading Blog";
+        setLoading(false);
       }
     };
 
     fetchBlogDetails();
-  }, [id]);
+  }, [slug]);
 
-  const shareOnSocialMedia = (platform) => {
-    const shareUrl = `${window.location.origin}/blog/${id}`;
-    if (platform === "facebook") {
-      window.open(
-        `https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`,
-        "_blank"
+  const handleLikeBlog = async () => {
+    if (!token) {
+      toast.info("You Need Log In to Like This Blog.", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      }); // Notify user to log in
+      return;
+    }
+    try {
+      const response = await axios.post(
+        `${api}api/v1/blogs/${blog._id}/like`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
-    } else if (platform === "twitter") {
-      window.open(`https://twitter.com/share?url=${shareUrl}`, "_blank");
-    } else if (platform === "linkedin") {
-      window.open(
-        `https://www.linkedin.com/sharing/share-offsite/?url=${shareUrl}`,
-        "_blank"
-      );
+
+      setBlog((prev) => ({
+        ...prev,
+        likes: response.data.data,
+      }));
+
+      const updatedUserData = response.data.data;
+
+      // Update the user state and localStorage
+      updateUser({ ...user, likes: updatedUserData });
+    } catch (error) {
+      console.error("Error liking the blog:", error);
+      setError("Failed to like the blog.");
     }
   };
 
+  const shareOnSocialMedia = (platform) => {
+    const shareUrl = `${window.location.origin}/blog/${slug}`;
+    const urls = {
+      facebook: `https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`,
+      twitter: `https://twitter.com/share?url=${shareUrl}`,
+      linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${shareUrl}`,
+    };
+    window.open(urls[platform], "_blank");
+  };
+
+  if (loading) return <Loading />;
   if (error) return <div>{error}</div>;
   if (!blog || !author) return <Loading />;
+
+  const hasLiked = blog.likes.includes(user?._id);
+  console.log("🚀 ~ DetailBlogPage ~ hasLiked:", hasLiked);
+  console.log("🚀 ~ DetailBlogPage ~ author:", author._id);
 
   return (
     <div className="flex gap-x-8">
@@ -78,7 +126,7 @@ function DetailBlogPage() {
         </h1>
         <div className="text-gray-600 mb-4 flex items-center gap-x-4">
           <img
-            src={getImageUrl(blog?.author?.avatar)}
+            src={getImageUrl(author?.avatar)}
             alt=""
             className="w-8 h-8 rounded-full"
           />
@@ -96,20 +144,30 @@ function DetailBlogPage() {
 
           <span className="block w-full h-[1px] bg-gray-100 mt-20 mb-8"></span>
 
-          <button
-            onClick={() => setIsModalOpen(true)}
-            className="mt-6 bg-buttonColor flex items-center gap-x-4 text-white px-4 py-2 rounded-lg"
-          >
-            <FaShareAlt />
-            <span>Share this blog</span>
-          </button>
+          <div className="flex items-center justify-between">
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="bg-buttonColor flex items-center gap-x-4 text-white px-4 py-2 rounded-lg"
+            >
+              <FaShareAlt />
+              <span>Share this blog</span>
+            </button>
+
+            <button onClick={handleLikeBlog} className="ml-4">
+              {hasLiked ? (
+                <FaHeart size={20} className="text-red-500" />
+              ) : (
+                <FaRegHeart size={20} className="text-red-500" />
+              )}
+            </button>
+          </div>
 
           <div className="w-full my-8 py-16 px-10 flex items-center gap-x-10 rounded-lg bg-[#fee0cf]">
             <div className="w-32 h-32 rounded-full overflow-hidden">
               <img
-                src={`http://127.0.0.1:5000/api/v1${author.avatar}`}
+                src={getImageUrl(author?.avatar)}
                 alt=""
-                className="w-full h-full rounded-full hover:scale-105 transition-all"
+                className="w-full h-full rounded-full hover:scale-105 transition-all object-cover"
               />
             </div>
             <div className="flex-1">
@@ -145,7 +203,7 @@ function DetailBlogPage() {
       <ModalShare
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        blogLink={`${window.location.origin}/blog/${id}`}
+        blogLink={`${window.location.origin}/blog/${slug}`}
         shareOnSocialMedia={shareOnSocialMedia}
       />
     </div>

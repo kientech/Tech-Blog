@@ -63,14 +63,38 @@ exports.getBlogById = async (req, res) => {
   }
 };
 
+// get al blog by slug
+exports.getBlogBySlug = async (req, res) => {
+  try {
+    const blog = await Blog.findOne({ slug: req.params.slug });
+
+    if (!blog) {
+      return res.status(404).json({ message: "Blog not found" });
+    }
+
+    blog.views += 1;
+    await blog.save();
+
+    return res.status(200).json({
+      status: "success",
+      data: blog,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: "error",
+      message: error.message,
+    });
+  }
+};
+
 // get all blogs of user authen
 exports.getAllBlogsUser = async (req, res) => {
   try {
-    const order = req.query.order === "desc" ? 1 : -1; 
+    const order = req.query.order === "desc" ? 1 : -1;
 
     const blogs = await Blog.find({ author: req.user.id }).sort({
       createdAt: order,
-    }); 
+    });
 
     return res.status(200).json({
       status: "success",
