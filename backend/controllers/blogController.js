@@ -66,7 +66,12 @@ exports.getBlogById = async (req, res) => {
 // get all blogs of user authen
 exports.getAllBlogsUser = async (req, res) => {
   try {
-    const blogs = await Blog.find({ author: req.user.id });
+    const order = req.query.order === "desc" ? 1 : -1; 
+
+    const blogs = await Blog.find({ author: req.user.id }).sort({
+      createdAt: order,
+    }); 
+
     return res.status(200).json({
       status: "success",
       length: blogs.length,
@@ -95,7 +100,7 @@ exports.getAllBlogs = async (req, res) => {
       message: error.message,
     });
   }
-}
+};
 
 // edit blog by user
 exports.editBlog = async (req, res) => {
