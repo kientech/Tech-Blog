@@ -314,6 +314,39 @@ exports.likeBlog = async (req, res) => {
   }
 };
 
+// get blog trending
+exports.getTrendingBlogs = async (req, res) => {
+  const { count = 5 } = req.query;
+
+  try {
+    const topBlogs = await Blog.aggregate([
+      {
+        $match: {
+          views: { $gt: 0 }, // Optional: Ensure that only blogs with more than 0 views are included
+        },
+      },
+      {
+        $sort: { views: -1 }, // Sort by views in descending order
+      },
+      {
+        $limit: parseInt(count, 10), // Limit the number of results to `n`
+      },
+    ]);
+
+    return res.status(200).json({
+      success: true,
+      length: topBlogs.length,
+      data: topBlogs,
+    });
+  } catch (error) {
+    console.error("Error fetching top blogs by views:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
+  }
+};
+
 // get liked blog
 exports.getLikedBlogs = async (req, res) => {
   try {
