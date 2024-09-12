@@ -8,6 +8,7 @@ import parse from "html-react-parser";
 import SideBar from "../components/Client/SideBar/SideBar";
 import ModalShare from "../components/Client/Share Blog/ModalShare";
 import { FaShareAlt } from "react-icons/fa";
+import { getImageUrl } from "../utils/getImageUrl";
 
 function DetailBlogPage() {
   const [blog, setBlog] = useState(null);
@@ -77,7 +78,7 @@ function DetailBlogPage() {
         </h1>
         <div className="text-gray-600 mb-4 flex items-center gap-x-4">
           <img
-            src={`${api}api/v1${author.avatar}`}
+            src={getImageUrl(blog?.author?.avatar)}
             alt=""
             className="w-8 h-8 rounded-full"
           />
