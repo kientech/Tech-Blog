@@ -21,6 +21,59 @@ function EditBlogPage() {
   const token = Cookies.get("token");
   const { user, loadUserFromLocalStorage } = useAuthStore();
 
+  const categories = [
+    "Artificial Intelligence (AI)",
+    "Machine Learning",
+    "Deep Learning",
+    "Data Science",
+    "Big Data",
+    "Internet of Things (IoT)",
+    "Blockchain",
+    "Cybersecurity",
+    "Cloud Computing",
+    "Software Development",
+    "Web Development",
+    "Mobile App Development",
+    "Augmented Reality (AR)",
+    "Virtual Reality (VR)",
+    "DevOps",
+    "Database Management",
+    "Programming Languages",
+    "Tech Startups",
+    "Tech Trends",
+    "Software Engineering",
+    "Embedded Systems",
+    "Networking",
+    "IT Infrastructure",
+    "Digital Transformation",
+    "Robotics",
+    "Quantum Computing",
+    "Tech Reviews",
+    "Tech Gadgets",
+    "Electronics",
+    "Cloud Services",
+    "Enterprise Software",
+    "Data Analytics",
+    "Automation",
+    "Tech Policy",
+    "Tech Education",
+    "Tech Conferences",
+    "Open Source Technology",
+    "Computational Biology",
+    "Human-Computer Interaction (HCI)",
+    "Wearable Technology",
+    "5G Technology",
+    "Software Testing",
+    "UI/UX Design",
+    "Game Development",
+    "Digital Marketing Technology",
+    "Tech Innovations",
+    "Tech Careers",
+    "Tech Ethics",
+    "Tech Investment",
+    "Technology and Society",
+  ];
+
   useEffect(() => {
     const checkAuth = async () => {
       await loadUserFromLocalStorage();
@@ -36,7 +89,7 @@ function EditBlogPage() {
 
   const fetchBlogData = async () => {
     try {
-      const response = await axios.get(`${api}api/v1/blogs/${id}`, {
+      const response = await axios.get(`${api}api/v1/blogs/blog/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -134,12 +187,18 @@ function EditBlogPage() {
             Category:
           </label>
           <input
-            type="text"
+            list="category-list"
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            placeholder="Select a category"
             required
           />
+          <datalist id="category-list">
+            {categories.map((cat, index) => (
+              <option key={index} value={cat} />
+            ))}
+          </datalist>
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700">

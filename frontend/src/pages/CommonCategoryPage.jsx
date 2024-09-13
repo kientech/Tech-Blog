@@ -1,6 +1,7 @@
 import React from "react";
 import { Link, useParams } from "react-router-dom";
 import CategoryBlogPage from "../components/Client/Category Page/CategoryBlogPage";
+import SideBar from "../components/Client/SideBar/SideBar";
 
 function CommonCategoryPage() {
   const { category } = useParams();
@@ -26,14 +27,12 @@ function CommonCategoryPage() {
       </div>
 
       <div className="flex flex-col md:flex-row gap-x-8">
-        <div className="md:w-3/4 w-full p-10 border rounded-lg">
+        <div className="md:w-[70%] w-full p-10 border rounded-lg">
           <CategoryBlogPage category={category} />
         </div>
-        <div className="md:w-1/4 w-full mt-8 md:mt-0">
+        <div className="md:w-[30%] w-full mt-8 md:mt-0">
           {/* Placeholder for additional content */}
-          <div className="p-4 bg-white rounded-lg shadow-md">
-            <p className="text-center">Sidebar Content Here</p>
-          </div>
+          <SideBar />
         </div>
       </div>
     </>

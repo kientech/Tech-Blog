@@ -13,7 +13,7 @@ router.get("/filter", blogController.filterBlogs);
 router.get("/latest", blogController.getLastestBlog);
 router.get("/trending", blogController.getTrendingBlogs);
 router.get("/category/:category", blogController.getBlogsByCategory);
-// router.get("/:id", blogController.getBlogById);
+router.get("/blog/:id", blogController.getBlogById);
 router.get("/:slug", blogController.getBlogBySlug);
 router.get("/", authMiddleware, blogController.getAllBlogsUser);
 router.post("/:id/like", authMiddleware, blogController.likeBlog);

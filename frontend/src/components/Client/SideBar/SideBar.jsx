@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import PopularRecentTab from "../TabContent/PopularRecentTab";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import {
   FaAngleRight,
   FaFacebookF,
@@ -139,53 +139,59 @@ function SideBar() {
     fetchLatestBlogs();
   }, []);
 
+  const location = useLocation();
+  console.log("🚀 ~ SideBar ~ location:", location.pathname);
+
   return loading ? (
     <SidebarSkeleton />
   ) : (
-    <div className="mt-8">
-      <div className="shadow-sm w-full h-[600px] p-10 border border-gray-100 rounded-lg">
-        <PopularRecentTab />
-      </div>
-
-      <div className="w-full p-4 mt-16 border border-gray-100 rounded-lg">
-        <h1 className="font-bold text-textBold text-center text-3xl my-4">
-          Tech Blog
-        </h1>
-        <p className="text-center px-4 text-sm text-textBase my-4">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed,
-          consequatur hic! A, minima ea dolorum voluptate amet aliquam!
-        </p>
-        <div className="md:flex md:items-center md:gap-x-4 md:justify-center my-4">
-          <Link
-            to="#"
-            aria-label="Facebook"
-            className="hover:text-buttonColor transition-all"
-          >
-            <FaFacebookF />
-          </Link>
-          <Link
-            to="#"
-            aria-label="Instagram"
-            className="hover:text-buttonColor transition-all"
-          >
-            <FaInstagram />
-          </Link>
-          <Link
-            to="#"
-            aria-label="Twitter"
-            className="hover:text-buttonColor transition-all"
-          >
-            <FaTwitter />
-          </Link>
-          <Link
-            to="#"
-            aria-label="LinkedIn"
-            className="hover:text-buttonColor transition-all"
-          >
-            <FaLinkedinIn />
-          </Link>
-        </div>
-      </div>
+    <div className={location.pathname === "/" ? "-mt-8": "mt-8"}>
+      {location.pathname === "/" ? (
+        <>
+          <div className="shadow-sm w-full h-[600px] p-10 border border-gray-100 rounded-lg">
+            <PopularRecentTab />
+          </div>
+          <div className="w-full p-4 mt-16 border border-gray-100 rounded-lg">
+            <h1 className="font-bold text-textBold text-center text-3xl my-4">
+              Tech Blog
+            </h1>
+            <p className="text-center px-4 text-sm text-textBase my-4">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed,
+              consequatur hic! A, minima ea dolorum voluptate amet aliquam!
+            </p>
+            <div className="md:flex md:items-center md:gap-x-4 md:justify-center my-4">
+              <Link
+                to="#"
+                aria-label="Facebook"
+                className="hover:text-buttonColor transition-all"
+              >
+                <FaFacebookF />
+              </Link>
+              <Link
+                to="#"
+                aria-label="Instagram"
+                className="hover:text-buttonColor transition-all"
+              >
+                <FaInstagram />
+              </Link>
+              <Link
+                to="#"
+                aria-label="Twitter"
+                className="hover:text-buttonColor transition-all"
+              >
+                <FaTwitter />
+              </Link>
+              <Link
+                to="#"
+                aria-label="LinkedIn"
+                className="hover:text-buttonColor transition-all"
+              >
+                <FaLinkedinIn />
+              </Link>
+            </div>
+          </div>
+        </>
+      ) : null}
 
       <div className="p-8 border border-gray-100 rounded-lg mt-8">
         <h1 className="text-xl font-bold text-textBold hover:text-buttonColor transition-none text-center mb-8">

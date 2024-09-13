@@ -153,7 +153,7 @@ function LikedBlogPage() {
                     <FaRegEye />
                   </button>
                   <button
-                    onClick={handleUnlikeBlog}
+                    onClick={() => handleUnlikeBlog(blog?._id)}
                     className="text-red-500 p-2 rounded-lg hover:bg-red-100 bg-red-50"
                   >
                     <FaHeartBroken />
@@ -165,9 +165,6 @@ function LikedBlogPage() {
             <tr>
               <td colSpan="6" className="text-center px-4 py-2">
                 No blogs found
-              </td>
-              <td colSpan="6" className="text-center px-4 py-2">
-                <Link to={"/dashboard/create-blog"}>Create new blog</Link>
               </td>
             </tr>
           )}

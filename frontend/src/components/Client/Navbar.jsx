@@ -66,9 +66,9 @@ const Navbar = () => {
   return (
     <div className="shadow-sm w-full">
       <div className="md:flex items-center justify-between bg-white py-4 md:px-10 px-7">
-        <h1 className="text-3xl font-bold mr-1 pt-2 text-[#ff7079]">
+        <Link to={'/'} className="text-3xl font-bold mr-1 pt-2 text-[#ff7079]">
           Tech Blog
-        </h1>
+        </Link>
 
         <div
           onClick={() => setOpen(!open)}
