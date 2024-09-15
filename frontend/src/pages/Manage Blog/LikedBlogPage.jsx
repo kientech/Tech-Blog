@@ -71,6 +71,7 @@ function LikedBlogPage() {
       };
       updateUser(updatedUserData);
 
+      // show alert with toastify
       toast.success("Blog unliked successfully.", {
         position: "top-center",
         autoClose: 2000,
