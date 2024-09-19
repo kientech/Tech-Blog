@@ -44,7 +44,7 @@ function LatestBlogComponent() {
   // Show skeleton loaders when data is null
   if (!latest || !author) {
     return (
-      <div className="w-full h-[600px] rounded-lg overflow-hidden">
+      <div className="w-full md:h-[600px] h-[400px] rounded-lg overflow-hidden">
         <Skeleton height={600} />
         <div className="absolute bottom-24 p-10 w-[700px] leading-relaxed">
           <Skeleton circle={true} height={30} width={100} />

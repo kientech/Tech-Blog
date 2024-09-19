@@ -68,9 +68,9 @@ function EditorByUserItem() {
   return (
     <div className="mt-16">
       <h1 className="font-bold text-3xl text-textBold my-4">Editor's Pick</h1>
-      <div className="flex gap-x-8">
+      <div className="md:flex-row flex-col gap-x-8">
         {loading ? (
-          <div className="w-full h-full p-8 border flex gap-x-8 border-gray-100 rounded-lg">
+          <div className="w-full h-full p-8 border md:flex-row gap-x-8 border-gray-100 rounded-lg">
             <div className="w-1/2">
               <Skeleton height={300} />
               <div className="flex items-center gap-x-2 my-4 mx-2">
@@ -99,8 +99,8 @@ function EditorByUserItem() {
         ) : (
           firstBlog && (
             <Link to={firstBlog.slug ? `/blog/${firstBlog.slug}` : "/error"}>
-              <div className="w-full h-full p-8 border flex gap-x-8 border-gray-100 rounded-lg">
-                <div className="w-1/2">
+              <div className="w-full h-full md:p-8 p-2 border md:flex-row flex-col gap-x-8 border-gray-100 rounded-lg">
+                <div className="md:w-1/2 w-full">
                   <div className="w-full h-[300px] overflow-hidden rounded-lg">
                     <img
                       src={firstBlog.image || "https://via.placeholder.com/300"}
@@ -126,17 +126,20 @@ function EditorByUserItem() {
                     {firstBlog.title || "Title"}
                   </h1>
                   <p className="my-2 text-textBase text-sm font-base mx-2">
-                    {parse(firstBlog?.content.slice(0, 500) || "Content not available.")}
+                    {parse(
+                      firstBlog?.content.slice(0, 500) ||
+                        "Content not available."
+                    )}
                   </p>
                 </div>
-                <div className="w-1/2 flex-col h-full justify-between space-y-4">
+                <div className="md:w-1/2 w-full items-center flex-col h-full justify-between space-y-4">
                   {otherBlogs.slice(0, 6).map((blog) => (
                     <Link
                       to={blog.slug ? `/blog/${blog.slug}` : "/error"}
                       className="block"
                       key={blog._id}
                     >
-                      <div className="flex gap-x-4">
+                      <div className="flex items-center gap-x-4">
                         <div className="w-[30%] h-full rounded-lg overflow-hidden">
                           <img
                             src={

@@ -44,8 +44,8 @@ function AllTrendingBlogItem() {
 
   return (
     <div>
-      <div className="p-10 rounded-lg border border-gray-100">
-        <div className="top grid grid-cols-2 gap-x-5">
+      <div className="p-2 md:p-10 rounded-lg border border-gray-100">
+        <div className="top grid md:grid-cols-2 gap-y-4 grid-cols-1 gap-x-5">
           {loading
             ? Array.from({ length: 2 }).map((_, index) => (
                 <div
@@ -112,7 +112,7 @@ function AllTrendingBlogItem() {
               ))}
         </div>
         <div className="bottom mt-8">
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid md:grid-cols-2 grid-cols-1 gap-4">
             {loading
               ? Array.from({ length: 4 }).map((_, index) => (
                   <div className="flex gap-x-4" key={index}>

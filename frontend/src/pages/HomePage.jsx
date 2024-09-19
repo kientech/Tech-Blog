@@ -7,13 +7,13 @@ import AllTrendingBlogsComponent from "../components/Client/AllTrendingBlogs/All
 
 function HomePage() {
   useEffect(() => {
-    document.title = "Home | Tech Blog"
-  }, [])
+    document.title = "Home | Tech Blog";
+  }, []);
 
   return (
     <>
-      <div className="md:flex gap-x-8">
-        <div className="my-8 md:w-[70%] w-full">
+      <div className="md:flex gap-x-8 ">
+        <div className="my-8 md:w-[70%] w-full -z-100">
           <LatestBlogComponent />
           {/* editor's pick */}
           <EditorByUserComponent />
@@ -38,12 +38,12 @@ function HomePage() {
               Latest Posts
             </h1>
 
-            <div className="p-10 rounded-lg border border-gray-100 my-8">
+            <div className="md:p-10 p-2 rounded-lg border border-gray-100 my-8">
               <AllLatestComponent />
             </div>
           </div>
         </div>
-        <div className="w-[30%] mt-16">
+        <div className="w-[30%] md:block hidden mt-16">
           <SideBar />
         </div>
       </div>
