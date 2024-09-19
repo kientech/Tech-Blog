@@ -101,4 +101,4 @@ MEAN Tech Blog is a full-stack blogging platform built using the MEAN stack (Mon
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](./LICENSE) file for details.
+This project is licensed under the MIT License. See the [LICENSE](./LICENSE) file for details. 
