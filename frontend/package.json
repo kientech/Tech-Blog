@@ -10,8 +10,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@tinymce/tinymce-react": "^5.1.1",
     "axios": "^1.7.7",
     "formik": "^2.4.6",
+    "highlight.js": "^11.10.0",
     "html-react-parser": "^5.1.15",
     "js-cookie": "^3.0.5",
     "jwt-decode": "^4.0.0",

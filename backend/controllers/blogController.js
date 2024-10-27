@@ -3,29 +3,39 @@ const Blog = require("../models/blogModel");
 const User = require("../models/userModel");
 // const slug = require("slugify")
 
+
 exports.createBlog = async (req, res) => {
   try {
-    const { title, content, category, image } = req.body;
+    const { title, content, category } = req.body;
+
+    // Kiểm tra xem người dùng đã được xác thực chưa
     if (!req.user || !req.user._id) {
       return res.status(401).json({
         status: "error",
         message: "Unauthorized",
       });
     }
-    // Create a new blog
+
+    // Lấy các đường dẫn ảnh từ req.files
+    const images = req.files.map((file) => file.path); // Sử dụng req.files để lấy đường dẫn ảnh
+
+    // Tạo một blog mới
     const blog = new Blog({
       title,
       content,
       category,
-      image,
+      images, // Lưu trữ các đường dẫn ảnh
       author: req.user._id,
       status: "approved",
     });
 
+    // Lưu blog vào cơ sở dữ liệu
     await blog.save();
 
+    // Cập nhật người dùng để thêm blog mới vào danh sách
     await User.findByIdAndUpdate(req.user._id, { $push: { blogs: blog._id } });
 
+    // Phản hồi thành công
     return res.status(200).json({
       status: "success",
       message: "Created New Blog Successfully!",
@@ -320,19 +330,9 @@ exports.getTrendingBlogs = async (req, res) => {
   const { count = 5 } = req.query;
 
   try {
-    const topBlogs = await Blog.aggregate([
-      {
-        $match: {
-          views: { $gt: 0 }, // Optional: Ensure that only blogs with more than 0 views are included
-        },
-      },
-      {
-        $sort: { views: -1 }, // Sort by views in descending order
-      },
-      {
-        $limit: parseInt(count, 10), // Limit the number of results to `n`
-      },
-    ]);
+    const topBlogs = await Blog.find({ views: { $gt: 0 } }) // Tìm các blog có views lớn hơn 0
+      .sort({ views: -1 }) // Sắp xếp theo views giảm dần
+      .limit(parseInt(count, 10)); // Giới hạn số lượng kết quả trả về
 
     return res.status(200).json({
       success: true,
